@@ -1,8 +1,7 @@
 import os
 import json
 from product import Product
-from physical_product import PhysicalProduct
-from digital_product import DigitalProduct
+from product_factory import ProductFactory
 from shipping import CanBeShipped
 from supplier import Supplier
 
@@ -190,30 +189,32 @@ class Inventory:
             product_type = item.get("type")
 
             if product_type == "physical":
-                product = PhysicalProduct(
+                product = ProductFactory.create(
+                    product_type,
                     item["id"],
                     item["name"],
                     item["price"],
                     item["stock"],
-                    item["weight"],
-                    supplier
+                    supplier,
+                    weight=item["weight"]
                 )
 
             elif product_type == "digital":
-                product = DigitalProduct(
+                product = ProductFactory.create(
+                    product_type,
                     item["id"],
                     item["name"],
                     item["price"],
                     item["stock"],
-                    item["download_size"],
-                    supplier
+                    supplier,
+                    download_size=item["download_size"]
                 )
 
             else:
                 raise ValueError(
                     f"Unknown product type '{product_type}' "
                     f"for product {item['id']}."
-                )
+                 )
 
             self.add_product(product)
 

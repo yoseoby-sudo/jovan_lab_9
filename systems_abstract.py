@@ -1,10 +1,9 @@
 import math
 from inventory import Inventory
-from physical_product import PhysicalProduct
-from digital_product import DigitalProduct
 from shipping import CanBeShipped
 from supplier import Supplier
 from order import Order
+from product_factory import ProductFactory
 
 
 def select_supplier(inventory: Inventory) -> Supplier | None:
@@ -105,7 +104,7 @@ def handle_add_product(inventory: Inventory) -> None:
         print("Product creation cancelled.")
         return
 
-    # 7. Create the product based on its type
+     # 7. Create the product using ProductFactory
     try:
         if product_type == "physical":
 
@@ -122,13 +121,14 @@ def handle_add_product(inventory: Inventory) -> None:
                 except ValueError:
                     print("Please enter a valid weight.")
 
-            new_product = PhysicalProduct(
+            new_product = ProductFactory.create(
+                product_type,
                 product_id,
                 product_name,
                 price,
                 stock,
-                weight,
-                supplier
+                supplier,
+                weight=weight
             )
 
         else:
@@ -148,13 +148,14 @@ def handle_add_product(inventory: Inventory) -> None:
                 except ValueError:
                     print("Please enter a valid download size.")
 
-            new_product = DigitalProduct(
+            new_product = ProductFactory.create(
+                product_type,
                 product_id,
                 product_name,
                 price,
                 stock,
-                download_size,
-                supplier
+                supplier,
+                download_size=download_size
             )
 
         # 8. Add product and record transaction
@@ -166,6 +167,7 @@ def handle_add_product(inventory: Inventory) -> None:
 
     except (ValueError, TypeError) as error:
         print(f"Product could not be added: {error}")
+
 
 
 # Handles user input and logic for updating product stock.

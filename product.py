@@ -11,8 +11,8 @@ class Product(ABC):
         if not isinstance(name, str) or not name.strip():
             raise ValueError("Product name cannot be empty.")
 
-        if not isinstance(price, (int, float)) or isinstance(price, bool) or not math.isfinite(price) or price < 0:
-            raise ValueError("Price must be a valid non-negative number.")
+        if not isinstance(price, (int, float)) or isinstance(price, bool) or not math.isfinite(price) or price <= 0:
+            raise ValueError("Price must be a valid number greater than zero.")
 
         if not isinstance(stock, int) or isinstance(stock, bool) or stock < 0:
             raise ValueError("Stock must be a non-negative integer.")
