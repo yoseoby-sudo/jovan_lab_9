@@ -5,6 +5,19 @@ from supplier import Supplier
 from order import Order
 from product_factory import ProductFactory
 
+def get_positive_float(prompt: str) -> float:
+    while True:
+        try:
+            number = float(input(prompt))
+
+            if not math.isfinite(number) or number <= 0:
+                print("Please enter a number greater than zero.")
+                continue
+
+            return number
+
+        except ValueError:
+            print("Please enter a valid number, e.g. 12.50")
 
 def select_supplier(inventory: Inventory) -> Supplier | None:
     if not inventory.suppliers:
@@ -70,19 +83,8 @@ def handle_add_product(inventory: Inventory) -> None:
         print("Product name cannot be empty.")
 
     # 4. Enter product price
-    while True:
-        try:
-            price = float(input("Price: $"))
-
-            if not math.isfinite(price) or price < 0:
-                print("Price must be a valid non-negative number.")
-                continue
-
-            break
-
-        except ValueError:
-            print("Please enter a valid price.")
-
+    price = get_positive_float("Price: $")
+    
     # 5. Enter product stock
     while True:
         try:
@@ -108,18 +110,7 @@ def handle_add_product(inventory: Inventory) -> None:
     try:
         if product_type == "physical":
 
-            while True:
-                try:
-                    weight = float(input("Product Weight (kg): "))
-
-                    if not math.isfinite(weight) or weight <= 0:
-                        print("Weight must be a valid positive number.")
-                        continue
-
-                    break
-
-                except ValueError:
-                    print("Please enter a valid weight.")
+            weight = get_positive_float("Product Weight (kg): ")
 
             new_product = ProductFactory.create(
                 product_type,
@@ -133,20 +124,7 @@ def handle_add_product(inventory: Inventory) -> None:
 
         else:
 
-            while True:
-                try:
-                    download_size = float(
-                        input("Download Size (MB): ")
-                    )
-
-                    if not math.isfinite(download_size) or download_size <= 0:
-                        print("Download size must be a valid positive number.")
-                        continue
-
-                    break
-
-                except ValueError:
-                    print("Please enter a valid download size.")
+            download_size = get_positive_float("Download Size (MB): ")
 
             new_product = ProductFactory.create(
                 product_type,
@@ -483,7 +461,6 @@ def main() -> None:
 
         else:
             print("Invalid option. Please choose 1-9.")
-
 
 if __name__ == "__main__":
     main()
