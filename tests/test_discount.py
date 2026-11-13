@@ -1,4 +1,3 @@
-
 import pytest
 
 from order import Order
@@ -6,6 +5,8 @@ from no_discount import NoDiscount
 from percentage_discount import PercentageDiscount
 from bulk_discount import BulkDiscount
 from student_discount import StudentDiscount
+from physical_product import PhysicalProduct
+from supplier import Supplier
 
 
 def test_no_discount():
@@ -34,13 +35,34 @@ def test_student_discount():
 
 
 def test_change_discount_strategy():
+    supplier = Supplier(
+        "S001",
+        "ABC Supplier",
+        "abc@example.com"
+    )
+
+    product = PhysicalProduct(
+        101,
+        "Desk Lamp",
+        250,
+        10,
+        1.5,
+        supplier
+    )
+
     order = Order("ORD001")
+    order.add_order_line(product, 2)
 
+    # Original total: 500
+    assert order.calculate_total() == 500
+
+    # Bulk discount: 500 - 20 = 480
     order.set_discount(BulkDiscount(200, 20))
-    assert order.calculate_total() == 0
+    assert order.calculate_total() == 480
 
+    # Percentage discount: 500 - 10% = 450
     order.set_discount(PercentageDiscount(10))
-    assert order.calculate_total() == 0
+    assert order.calculate_total() == 450
 
 
 def test_invalid_percentage():

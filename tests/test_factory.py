@@ -1,4 +1,3 @@
-
 import pytest
 
 from product_factory import ProductFactory

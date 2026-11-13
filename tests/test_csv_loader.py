@@ -1,4 +1,3 @@
-
 import pytest
 
 from inventory import Inventory

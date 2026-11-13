@@ -1,4 +1,3 @@
-
 import pytest
 
 from physical_product import PhysicalProduct
